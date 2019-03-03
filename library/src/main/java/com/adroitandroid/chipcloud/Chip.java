@@ -23,6 +23,8 @@ public class Chip extends android.support.v7.widget.AppCompatTextView implements
     private int selectTransitionMS = 750;
     private int deselectTransitionMS = 500;
     private boolean isLocked = false;
+    private int unselectedDrawable = -1;
+    private int selectedDrawable = -1;
     private ChipCloud.Mode mode;
 
     public void setChipListener(ChipListener listener) {
@@ -46,30 +48,46 @@ public class Chip extends android.support.v7.widget.AppCompatTextView implements
 
     public void initChip(Context context, int index, String label, Typeface typeface, int textSizePx,
                          boolean allCaps, int selectedColor, int selectedFontColor, int unselectedColor,
+                         int selectedDrawable, int unselectedDrawable,
                          int unselectedFontColor, ChipCloud.Mode mode) {
 
         this.index = index;
         this.selectedFontColor = selectedFontColor;
         this.unselectedFontColor = unselectedFontColor;
+        this.selectedDrawable = selectedDrawable;
+        this.unselectedDrawable = unselectedDrawable;
         this.mode = mode;
 
-        Drawable selectedDrawable = ContextCompat.getDrawable(context, R.drawable.chip_selected);
+        Drawable selectDrawable;
+
+        if (selectedDrawable == -1) {
+            selectDrawable = ContextCompat.getDrawable(context, R.drawable.chip_selected);
+        } else  {
+            selectDrawable = ContextCompat.getDrawable(context, selectedDrawable);
+        }
 
         if (selectedColor == -1) {
-            selectedDrawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(context, R.color.dark_grey), PorterDuff.Mode.MULTIPLY));
+            selectDrawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(context, R.color.dark_grey), PorterDuff.Mode.MULTIPLY));
         } else {
-            selectedDrawable.setColorFilter(new PorterDuffColorFilter(selectedColor, PorterDuff.Mode.MULTIPLY));
+            selectDrawable.setColorFilter(new PorterDuffColorFilter(selectedColor, PorterDuff.Mode.MULTIPLY));
         }
 
         if (selectedFontColor == -1) {
             this.selectedFontColor = ContextCompat.getColor(context, R.color.white);
         }
 
-        Drawable unselectedDrawable = ContextCompat.getDrawable(context, R.drawable.chip_selected);
-        if (unselectedColor == -1) {
-            unselectedDrawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(context, R.color.light_grey), PorterDuff.Mode.MULTIPLY));
+        Drawable unselectDrawable;
+
+        if (unselectedDrawable == -1) {
+            unselectDrawable = ContextCompat.getDrawable(context, R.drawable.chip_selected);
         } else {
-            unselectedDrawable.setColorFilter(new PorterDuffColorFilter(unselectedColor, PorterDuff.Mode.MULTIPLY));
+            unselectDrawable = ContextCompat.getDrawable(context, unselectedDrawable);
+        }
+
+        if (unselectedColor == -1) {
+            unselectDrawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(context, R.color.light_grey), PorterDuff.Mode.MULTIPLY));
+        } else {
+            unselectDrawable.setColorFilter(new PorterDuffColorFilter(unselectedColor, PorterDuff.Mode.MULTIPLY));
         }
 
         if (unselectedFontColor == -1) {
@@ -77,8 +95,8 @@ public class Chip extends android.support.v7.widget.AppCompatTextView implements
         }
 
         Drawable backgrounds[] = new Drawable[2];
-        backgrounds[0] = unselectedDrawable;
-        backgrounds[1] = selectedDrawable;
+        backgrounds[0] = unselectDrawable;
+        backgrounds[1] = selectDrawable;
 
         crossfader = new TransitionDrawable(backgrounds);
 
@@ -188,12 +206,24 @@ public class Chip extends android.support.v7.widget.AppCompatTextView implements
         private int chipHeight;
         private int selectTransitionMS = 750;
         private int deselectTransitionMS = 500;
+        private int selectedDrawable;
+        private int unselectedDrawable;
 
         private ChipListener chipListener;
         private ChipCloud.Mode mode;
 
         public ChipBuilder index(int index) {
             this.index = index;
+            return this;
+        }
+
+        public ChipBuilder selectedDrawable(int selectedDrawable) {
+            this.selectedDrawable = selectedDrawable;
+            return this;
+        }
+
+        public ChipBuilder unselectedDrawable(int unselectedDrawable) {
+            this.unselectedDrawable = unselectedDrawable;
             return this;
         }
 
@@ -265,7 +295,8 @@ public class Chip extends android.support.v7.widget.AppCompatTextView implements
         public Chip build(Context context) {
             Chip chip = (Chip) LayoutInflater.from(context).inflate(R.layout.chip, null);
             chip.initChip(context, index, label, typeface, textSizePx, allCaps, selectedColor,
-                    selectedFontColor, unselectedColor, unselectedFontColor, mode);
+                    selectedFontColor, unselectedColor, selectedDrawable, unselectedDrawable,
+                    unselectedFontColor, mode);
             chip.setSelectTransitionMS(selectTransitionMS);
             chip.setDeselectTransitionMS(deselectTransitionMS);
             chip.setChipListener(chipListener);

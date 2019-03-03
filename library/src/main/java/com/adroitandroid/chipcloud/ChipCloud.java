@@ -19,6 +19,8 @@ public class ChipCloud extends FlowLayout implements ChipListener {
     private int unselectedFontColor = -1;
     private int selectTransitionMS = 750;
     private int deselectTransitionMS = 500;
+    private int selectedDrawable = -1;
+    private int unselectedDrawable = -1;
     private Mode mode = Mode.SINGLE;
     private Gravity gravity = Gravity.LEFT;
     private Typeface typeface;
@@ -44,6 +46,8 @@ public class ChipCloud extends FlowLayout implements ChipListener {
         try {
             selectedColor = a.getColor(R.styleable.ChipCloud_selectedColor, -1);
             selectedFontColor = a.getColor(R.styleable.ChipCloud_selectedFontColor, -1);
+            selectedDrawable = a.getInt(R.styleable.ChipCloud_selectedDrawable, -1);
+            unselectedDrawable = a.getInt(R.styleable.ChipCloud_deselectedDrawable, -1);
             unselectedColor = a.getColor(R.styleable.ChipCloud_deselectedColor, -1);
             unselectedFontColor = a.getColor(R.styleable.ChipCloud_deselectedFontColor, -1);
             selectTransitionMS = a.getInt(R.styleable.ChipCloud_selectTransitionMS, 750);
@@ -127,6 +131,8 @@ public class ChipCloud extends FlowLayout implements ChipListener {
         chipHeight = getResources().getDimensionPixelSize(R.dimen.material_chip_height);
     }
 
+
+
     public void setSelectedColor(int selectedColor) {
         this.selectedColor = selectedColor;
     }
@@ -149,6 +155,15 @@ public class ChipCloud extends FlowLayout implements ChipListener {
 
     public void setDeselectTransitionMS(int deselectTransitionMS) {
         this.deselectTransitionMS = deselectTransitionMS;
+    }
+
+    public void setSelectedDrawable(int selectedDrawable) {
+        this.selectedDrawable = selectedDrawable;
+    }
+
+
+    public void setUnselectedDrawable(int unselectedDrawable) {
+        this.unselectedDrawable = unselectedDrawable;
     }
 
     public void setMode(Mode mode) {
@@ -202,8 +217,10 @@ public class ChipCloud extends FlowLayout implements ChipListener {
                 .allCaps(allCaps)
                 .selectedColor(selectedColor)
                 .selectedFontColor(selectedFontColor)
+                .selectedDrawable(selectedDrawable)
                 .unselectedColor(unselectedColor)
                 .unselectedFontColor(unselectedFontColor)
+                .unselectedDrawable(unselectedDrawable)
                 .selectTransitionMS(selectTransitionMS)
                 .deselectTransitionMS(deselectTransitionMS)
                 .chipHeight(chipHeight)
@@ -274,6 +291,8 @@ public class ChipCloud extends FlowLayout implements ChipListener {
         private ChipCloud chipCloud;
         private int selectedColor = -1;
         private int selectedFontColor = -1;
+        private int selectedDrawable = -1;
+        private int deselectedDrawable = -1;
         private int deselectedColor = -1;
         private int deselectedFontColor = -1;
         private int selectTransitionMS = -1;
@@ -295,6 +314,16 @@ public class ChipCloud extends FlowLayout implements ChipListener {
 
         public Configure mode(Mode mode) {
             this.mode = mode;
+            return this;
+        }
+
+        public Configure selectedDrawable(int selectedDrawable) {
+            this.selectedDrawable = selectedDrawable;
+            return this;
+        }
+
+        public Configure deselectedDrawable(int deselectedDrawable) {
+            this.deselectedDrawable = deselectedDrawable;
             return this;
         }
 
@@ -378,6 +407,8 @@ public class ChipCloud extends FlowLayout implements ChipListener {
             if (typeface != null) chipCloud.setTypeface(typeface);
             if (textSize != -1) chipCloud.setTextSize(textSize);
             if (allCaps != null) chipCloud.setAllCaps(allCaps);
+            if (selectedDrawable != -1) chipCloud.setSelectedDrawable(selectedDrawable);
+            if (deselectedDrawable != -1) chipCloud.setUnselectedDrawable(deselectedDrawable);
             if (selectedColor != -1) chipCloud.setSelectedColor(selectedColor);
             if (selectedFontColor != -1) chipCloud.setSelectedFontColor(selectedFontColor);
             if (deselectedColor != -1) chipCloud.setUnselectedColor(deselectedColor);

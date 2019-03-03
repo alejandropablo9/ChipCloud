@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ChipCloud">
+        <attr name="selectedDrawable" format="integer"/>
+        <attr name="deselectedDrawable" format="integer"/>
         <attr name="deselectedColor" format="color" />
         <attr name="deselectedFontColor" format="color" />
         <attr name="selectedColor" format="color" />
